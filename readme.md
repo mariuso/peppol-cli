@@ -2,7 +2,7 @@
 <p align="center">
   <br>
   <img src="assets/screenshot.png" alt="CLI screenshot"/>
-  <br><br>
+  <br>
   <i>Node based CLI tool for doing stuff with EHF and PEPPOL XML files</i>
   <br>
 </p>
