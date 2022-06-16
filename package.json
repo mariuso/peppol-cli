@@ -1,5 +1,5 @@
 {
-  "name": "ehf-cli",
+  "name": "peppol",
   "version": "1.0.0",
   "private": false,
   "description": "CLI tooling for EHF/PEPPOL XML files",

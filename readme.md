@@ -13,7 +13,7 @@ Install Node.js which includes Node Package Manager
 ## Getting started
 Install the EHF CLI globally:
 ```console
-npm install -g ehf-cli
+npm install -g peppol
 ```
 
 ## Commands
