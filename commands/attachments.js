@@ -1,71 +1,54 @@
-// import Conf from 'conf'
 import chalk from 'chalk';
-import xpath from 'xpath';
-import dom from 'xmldom';
 import fs from 'fs';
+import path from 'path';
+import { XMLParser } from 'fast-xml-parser';
+import mimetype from 'mime-types';
 
-// const conf = new Conf()
-const DomParser = dom.DOMParser;
+const processAttachment = (AdditionalDocumentReference) => {
+  const filename = AdditionalDocumentReference.Attachment.EmbeddedDocumentBinaryObject['@_filename'];
+  const filenameWithoutExtension = path.parse(filename).name;
+  const mimecode = AdditionalDocumentReference.Attachment.EmbeddedDocumentBinaryObject['@_mimeCode'];
+  const attachmentContent = AdditionalDocumentReference.Attachment.EmbeddedDocumentBinaryObject['#text'];
+
+  const fileExtension = mimetype.extension(mimecode);
+  const saveAsFilename = `${filenameWithoutExtension}.${fileExtension}`;
+  console.log(chalk.green.bold(`Saving attachment as ${saveAsFilename}`));
+  fs.writeFileSync(`${saveAsFilename}`, attachmentContent, 'base64');
+};
 
 const attachments = (filePath) => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      // console.error(err);
+  fs.readFile(filePath, 'utf8', (error, data) => {
+    if (error) {
+      // console.error(error);
       console.error(chalk.red.bold(`Could not read ${filePath}`));
-      console.error(chalk.red(err));
+      console.error(chalk.red(error));
 
-      return;
+      return null;
     }
 
-    console.log(chalk.green.bold(`Read ${filePath}`));
-    // console.log(chalk.green(data));
+    console.log(chalk.bgGreen.black.bold(`Reading file ${filePath}`));
 
-    const doc = new DomParser().parseFromString(data);
+    const XMLParserOptions = {
+      ignoreAttributes: false,
+      removeNSPrefix: true,
+    };
+    const parser = new XMLParser(XMLParserOptions);
+    const ehfJSON = parser.parse(data);
 
-    // eslint-disable-next-line max-len
-    //   //*[local-name(.)='Invoice']/*[local-name(.)='cac:AdditionalDocumentReference']/*[local-name(.)='cac:Attachment']/*[local-name(.)='cbc:EmbeddedDocumentBinaryObject']
-    let select = xpath.useNamespaces({
-      cac: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2',
-      cbc: 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2',
-      inv: 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2',
-      cre: 'urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2',
-    });
+    const AdditionalDocumentReference = (ehfJSON.CreditNote)
+      ? ehfJSON.CreditNote.AdditionalDocumentReference
+      : ehfJSON.Invoice.AdditionalDocumentReference;
 
-    // var nodes = xpath.select("", doc)
-    const nodesInvoice = select('/inv:Invoice/cac:AdditionalDocumentReference/cac:Attachment/cbc:EmbeddedDocumentBinaryObject', doc);
-    // loop for each node
-    nodesInvoice.forEach((node) => {
-      // @filename="831018682_46923535_GGLE7.pdf"
-      // @mimeCode="application/pdf"
-      const filename = node.getAttribute('filename');
-      const mimeCode = node.getAttribute('mimeCode');
-      const content = node.textContent;
-      if (mimeCode === 'application/pdf') {
-        console.log(chalk.green.bold(`Saving attachment to ${filePath}_${filename}`));
-        fs.writeFileSync(`${filePath}_${filename}`, content, 'base64');
-      }
-    });
+    // check if additional document reference is array
+    if (Array.isArray(AdditionalDocumentReference)) {
+      AdditionalDocumentReference.forEach((additionalDocumentReference) => {
+        processAttachment(additionalDocumentReference);
+      });
+    } else {
+      processAttachment(AdditionalDocumentReference);
+    }
 
-    select = xpath.useNamespaces({
-      cac: 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2',
-      cbc: 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2',
-      inv: 'urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2',
-    });
-
-    const nodesCreditnote = select('/inv:CreditNote/cac:AdditionalDocumentReference/cac:Attachment/cbc:EmbeddedDocumentBinaryObject', doc);
-    // loop for each node
-    nodesCreditnote.forEach((node) => {
-      // @filename="831018682_46923535_GGLE7.pdf"
-      // @mimeCode="application/pdf"
-      const filename = node.getAttribute('filename');
-      const mimeCode = node.getAttribute('mimeCode');
-      const content = node.textContent;
-      if (mimeCode === 'application/pdf') {
-        console.log(chalk.green.bold(`Saving attachment to ${filePath}_${filename}`));
-        fs.writeFileSync(`${filePath}_${filename}`, content, 'base64');
-      }
-    });
-    // console.log(chalk.green.bold(`${nodes}`))
+    return ehfJSON;
   });
 };
 
