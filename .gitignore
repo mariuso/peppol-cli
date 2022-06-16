@@ -1,0 +1,12 @@
+node_modules
+
+# iOS folder information
+.DS_Store
+
+# Optional npm cache directory
+.npm
+
+# Logs
+logs
+*.log
+npm-debug.log*
