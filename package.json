@@ -1,26 +1,27 @@
 {
-  "name": "pullembeddedfromehf",
+  "name": "ehf-cli",
   "version": "1.0.0",
-  "description": "",
+  "private": false,
+  "description": "CLI tooling for EHF/PEPPOL XML files",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "bin": {
     "ehf": "./index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mariuso/ehf-cli.git"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/mariuso/ehf-cli",
   "type": "module",
-  "keywords": [],
-  "author": "",
+  "keywords": ["ehf", "peppol", "xml", "cli"],
+  "author": "Marius Øseth",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.0.1",
     "commander": "^9.3.0",
-    "conf": "^10.1.2",
     "fast-xml-parser": "^4.0.8",
-    "mime-types": "^2.1.35",
-    "xmldom": "^0.6.0",
-    "xpath": "^0.0.32"
+    "mime-types": "^2.1.35"
   },
   "devDependencies": {
     "eslint": "^8.17.0",
