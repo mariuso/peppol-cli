@@ -1,6 +1,6 @@
 {
   "name": "peppol",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "CLI tooling for EHF/PEPPOL XML files",
   "main": "index.js",
@@ -14,7 +14,12 @@
   "readmeFilename": "README.md",
   "homepage": "https://github.com/mariuso/ehf-cli",
   "type": "module",
-  "keywords": ["ehf", "peppol", "xml", "cli"],
+  "keywords": [
+    "ehf",
+    "peppol",
+    "xml",
+    "cli"
+  ],
   "author": "Marius Øseth",
   "license": "ISC",
   "dependencies": {
