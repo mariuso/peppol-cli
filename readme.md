@@ -12,7 +12,7 @@ Install Node.js which includes Node Package Manager
 
 ## Getting started
 Install the EHF CLI globally:
-```sh
+```shell
 npm install -g ehf-cli
 ```
 
@@ -23,8 +23,8 @@ npm install -g ehf-cli
 
 ## Examples
 ### Extract embedded attachments to disk
-```sh
-$ ehf attachments ehf-file.xml
+```shell
+foo@bar:~$ ehf attachments ehf-file.xml
 Reading file ehf-file.xml
 
 Saving PDF attachment as ehf-file-attachmentfilename.pdf
