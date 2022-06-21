@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:mariuso/ehf-cli.git"
+    "url": "git@github.com:mariuso/peppol-cli.git"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/mariuso/ehf-cli",
+  "homepage": "https://github.com/mariuso/peppol-cli",
   "type": "module",
   "keywords": [
     "ehf",
